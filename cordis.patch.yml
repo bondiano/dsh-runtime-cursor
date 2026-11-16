@@ -1,0 +1,3 @@
+- insert:
+    - id: runtime-cursor
+      name: '@local/dsh-runtime-cursor'

@@ -1,0 +1,38 @@
+{
+  "name": "@local/dsh-runtime-cursor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check index.js && node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.13",
+    "dsh": ">=0.2.2-rc.3"
+  },
+  "peerDependencies": {
+    "@cursor/sdk": "1.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bondiano/dsh-runtime-cursor.git"
+  },
+  "homepage": "https://github.com/bondiano/dsh-runtime-cursor#readme",
+  "bugs": {
+    "url": "https://github.com/bondiano/dsh-runtime-cursor/issues"
+  }
+}
