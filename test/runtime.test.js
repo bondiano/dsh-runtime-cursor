@@ -45,3 +45,18 @@ test('reuses private DSH credential without including it in session metadata and
   assert.equal(created.apiKey, 'private-key')
   await assert.rejects(Array.fromAsync(runtime.send('a', 'go', { runId: 'r' })), /Cursor run failed/)
 })
+
+test('catalog lists deduplicated Cursor models with the private credential', async () => {
+  let requested
+  const runtime = createCursorRuntime({
+    getCredential: async () => 'private-key',
+    loadSdk: async () => ({ Agent: {}, Cursor: { models: { list: async options => {
+      requested = options
+      return [{ id: 'm1', displayName: 'Model One' }, { id: 'm1', displayName: 'Duplicate' }, { id: 'm2' }]
+    } } } }),
+  })
+  assert.deepEqual(await runtime.catalog(), {
+    models: [{ id: 'm1', name: 'Model One' }, { id: 'm2', name: 'm2' }],
+  })
+  assert.deepEqual(requested, { apiKey: 'private-key' })
+})

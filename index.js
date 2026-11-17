@@ -23,6 +23,20 @@ export function createCursorRuntime({ loadSdk = () => import('@cursor/sdk'), get
   return {
     id: 'cursor',
     capabilities: () => ({ resume: true, streaming: true, usage: true, cancel: true, fork: false, permissions: false, missions: false, settings: false }),
+    async catalog() {
+      const { Cursor } = await loadSdk()
+      const apiKey = await getCredential()
+      const listed = await Cursor.models.list(apiKey ? { apiKey } : undefined)
+      const seen = new Set()
+      const models = []
+      for (const model of listed ?? []) {
+        const id = typeof model?.id === 'string' ? model.id : undefined
+        if (!id || seen.has(id)) continue
+        seen.add(id)
+        models.push({ id, name: typeof model.displayName === 'string' ? model.displayName : id })
+      }
+      return { models }
+    },
     create: options => open(options),
     resume: async (id, options = {}) => sessions.has(id) ? { id, cwd: requireSession(id).cwd } : open(options, id),
     async *send(id, message, { runId, signal } = {}) {
