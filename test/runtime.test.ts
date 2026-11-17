@@ -28,7 +28,7 @@ test('cancel only targets the matching run and abort during SDK send cancels lat
   await runtime.cancel('a', 'other')
   await runtime.cancel('a', 'one')
   resolveSend({ cancel: async () => { cancelled++ }, async *stream() {}, wait: async () => ({ status: 'cancelled' }) })
-  assert.equal((await next).value.status, 'cancelled')
+  assert.equal((await next).value?.status, 'cancelled')
   await iterator.next()
   assert.equal(cancelled, 1)
 })

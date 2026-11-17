@@ -4,10 +4,15 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./index.js"
+    ".": {
+      "types": "./index.ts",
+      "default": "./dist/index.js"
+    }
   },
   "files": [
-    "index.js",
+    "dist/**/*.js",
+    "!dist/test/",
+    "index.ts",
     "cordis.patch.yml",
     "README.md"
   ],
@@ -17,8 +22,10 @@
     }
   },
   "scripts": {
-    "test": "node --test test/*.test.js",
-    "check": "node --check index.js && node --test test/*.test.js"
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test dist/test/*.test.js",
+    "check": "npm run typecheck && npm test"
   },
   "engines": {
     "node": ">=22.13",
@@ -34,5 +41,12 @@
   "homepage": "https://github.com/bondiano/dsh-runtime-cursor#readme",
   "bugs": {
     "url": "https://github.com/bondiano/dsh-runtime-cursor/issues"
+  },
+  "dependencies": {
+    "xstate": "5.33.4"
+  },
+  "devDependencies": {
+    "@types/node": "22.18.6",
+    "typescript": "7.0.2"
   }
 }
