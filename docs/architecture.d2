@@ -1,0 +1,16 @@
+direction: down
+
+apply: "runtime-cursor apply\n[TypeScript, cordis]"
+adapter: "createCursorRuntime\n[adapter id cursor]"
+machine: "run.machine\n[xstate 5.33]"
+registry: "agentRuntime registry\n[DSH inject]"
+creds: "credentials service\n[DSH, readRecord]"
+sdk: "ex_cursor_sdk\n[@cursor/sdk 1.3.1]"
+cloud: "ex_cursor_cloud\n[Agent API, models]"
+
+apply -> adapter: creates adapter
+apply -> creds: reads dsh-cursor grant
+adapter -> registry: register cursor
+adapter -> machine: run state
+adapter -> sdk: lazy import
+sdk -> cloud: agents and catalog
